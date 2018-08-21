@@ -2,10 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
 
-import STRIPE_PUBLISHABLE from './constants/stripe';
-import PAYMENT_SERVER_URL from './constants/server';
+const stripeKey =
+  process.env.NODE_ENV === 'production'
+    ? 'pk_live_MY_PUBLISHABLE_KEY'
+    : process.env.REACT_APP_TEST_PUB_KEY;
 
-const CURRENCY = 'USD';
+const currency = 'USD';
 
 const fromDollarToCent = amount => amount * 100;
 
@@ -19,10 +21,10 @@ const errorPayment = data => {
 
 const onToken = (amount, description) => token =>
   axios
-    .post(PAYMENT_SERVER_URL, {
+    .post('/api/transaction', {
       description,
       source: token.id,
-      currency: CURRENCY,
+      currency: currency,
       amount: fromDollarToCent(amount)
     })
     .then(successPayment)
@@ -34,8 +36,8 @@ const Checkout = ({ name, description, amount }) => (
     description={description}
     amount={fromDollarToCent(amount)}
     token={onToken(amount, description)}
-    currency={CURRENCY}
-    stripeKey={STRIPE_PUBLISHABLE}
+    currency={currency}
+    stripeKey={stripeKey}
   />
 );
 
