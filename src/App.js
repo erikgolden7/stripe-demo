@@ -10,8 +10,8 @@ class App extends Component {
         </div>
         <p className="App-intro">
           <Checkout
-            name={'The Road to learn React'}
-            description={'Only the Book'}
+            name={'React Demo Application'}
+            description={'Test payment processor'}
             amount={1}
           />
         </p>
